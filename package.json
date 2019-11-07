@@ -4,14 +4,17 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
+    "gh-pages": "^2.1.1",
     "home-on-the-range": "^1.2.3",
     "parcel-bundler": "^1.12.4"
   },
   "devDependencies": {},
   "scripts": {
     "dev": "parcel index.html",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html",
+    "deploy": "rm -rf dist/ && npm build && gh-pages -d dist"
   },
+  "homepage": "https://austinbeaufort.github.io/rock-paper-scissors",
   "keywords": [],
   "author": "",
   "license": "ISC"
