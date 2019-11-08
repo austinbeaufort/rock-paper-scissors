@@ -29,7 +29,7 @@ const runTheGame = event => {
             userChoice = 'scissors'
             break
         default:
-            log('error...not a valid option')
+            console.log('error...not a valid option')
     }
 
     pickWinner(userChoice)
@@ -40,7 +40,6 @@ const runTheGame = event => {
 const pickWinner = (userChoice) => {
     const computerChoice = h.randomChoice(['rock', 'paper', 'scissors'])
     if (userChoice === computerChoice) {
-        console.log('tie')
         displayScore.displayContent.textContent = `(You: ${userChoice}) VS (Computer: ${computerChoice}) >>> It's a tie!!`
     }
     else if (   userChoice === 'rock' && computerChoice === 'paper'
