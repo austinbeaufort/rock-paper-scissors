@@ -3,10 +3,10 @@ const score = {
     computer: 0,
 }
 
-const displayScore = {
+const display_content = {
     user: document.querySelector('.user-score'),
     computer: document.querySelector('.computer-score'),
-    displayContent: document.querySelector('.display-content'),
+    board_display: document.querySelector('.display-content'),
 }
 
-export { score, displayScore }
+export { score, display_content }

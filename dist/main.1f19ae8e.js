@@ -383,105 +383,170 @@ function makeReverseArray(firstNumber, secondNumber) {
 
 
 module.exports = h;
-},{}],"src/score.js":[function(require,module,exports) {
+},{}],"src/model.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.displayScore = exports.score = void 0;
+exports.display_content = exports.score = void 0;
 var score = {
   user: 0,
   computer: 0
 };
 exports.score = score;
-var displayScore = {
+var display_content = {
   user: document.querySelector('.user-score'),
   computer: document.querySelector('.computer-score'),
-  displayContent: document.querySelector('.display-content')
+  board_display: document.querySelector('.display-content')
 };
-exports.displayScore = displayScore;
-},{}],"src/app.js":[function(require,module,exports) {
+exports.display_content = display_content;
+},{}],"src/display.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.assignDisplayScoreVariables = exports.addListenerAndStartGame = void 0;
+exports.default = void 0;
 
-var _homeOnTheRange = _interopRequireDefault(require("home-on-the-range"));
+var _model = require("./model");
 
-var _score = require("./score");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Display =
+/*#__PURE__*/
+function () {
+  function Display() {
+    _classCallCheck(this, Display);
+  }
+
+  _createClass(Display, [{
+    key: "assign_display_score_variables",
+    value: function assign_display_score_variables() {
+      _model.display_content.user.textContent = _model.score.user;
+      _model.display_content.computer.textContent = _model.score.computer;
+    }
+  }, {
+    key: "update_computer_score",
+    value: function update_computer_score() {
+      _model.score.computer++;
+      _model.display_content.computer.textContent = _model.score.computer;
+    }
+  }, {
+    key: "update_user_score",
+    value: function update_user_score() {
+      _model.score.user++;
+      _model.display_content.user.textContent = _model.score.user;
+    }
+  }, {
+    key: "set_board_display_to_tie",
+    value: function set_board_display_to_tie(user_choice, computer_choice) {
+      _model.display_content.board_display.textContent = "(You: ".concat(user_choice, ") VS (Computer: ").concat(computer_choice, ") >>> It's a tie!!");
+    }
+  }, {
+    key: "set_board_display_to_loss",
+    value: function set_board_display_to_loss(user_choice, computer_choice) {
+      _model.display_content.board_display.textContent = "(You: ".concat(user_choice, ") VS (Computer: ").concat(computer_choice, ") >>> You lose, try again!");
+    }
+  }, {
+    key: "set_board_display_to_win",
+    value: function set_board_display_to_win(user_choice, computer_choice) {
+      _model.display_content.board_display.textContent = "(You: ".concat(user_choice, ") VS (Computer: ").concat(computer_choice, ") >>> You won! Best of 3??");
+    }
+  }]);
+
+  return Display;
+}();
+
+var display = new Display();
+var _default = display;
+exports.default = _default;
+},{"./model":"src/model.js"}],"src/app.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.run_game_logic = run_game_logic;
+
+var _homeOnTheRange = require("home-on-the-range");
+
+var _display = _interopRequireDefault(require("./display"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var addListenerAndStartGame = function addListenerAndStartGame() {
-  document.querySelector('.buttons-container').addEventListener('click', function (event) {
-    return runTheGame(event);
-  });
-};
-
-exports.addListenerAndStartGame = addListenerAndStartGame;
-
-var assignDisplayScoreVariables = function assignDisplayScoreVariables() {
-  _score.displayScore.user.textContent = _score.score.user;
-  _score.displayScore.computer.textContent = _score.score.computer;
-}; // FIRES GAME EVENTS AND LOGIC ON CLICK
+// FIRES GAME EVENTS AND LOGIC ON CLICK
+function run_game_logic(event) {
+  var user_choice = assign_user_choice(event.target.className);
+  var computer_choice = (0, _homeOnTheRange.randomChoice)(['rock', 'paper', 'scissors']);
+  var computer_wins = check_if_computer_wins(user_choice, computer_choice);
+  var tie = check_if_tie(user_choice, computer_choice);
+  update_score_and_display(user_choice, computer_choice, tie, computer_wins);
+} // ----------------------------------------------------------------------------------------
 
 
-exports.assignDisplayScoreVariables = assignDisplayScoreVariables;
+function assign_user_choice(button_clicked) {
+  var user_choice = '';
+  if (button_clicked === 'rock') user_choice = 'rock';
+  if (button_clicked === 'paper') user_choice = 'paper';
+  if (button_clicked === 'scissors') user_choice = 'scissors';
+  return user_choice;
+}
 
-var runTheGame = function runTheGame(event) {
-  var userChoice = '';
+function check_if_computer_wins(user_choice, computer_choice) {
+  var computer_wins = false;
 
-  switch (event.target.className) {
-    case 'rock':
-      userChoice = 'rock';
-      break;
-
-    case 'paper':
-      userChoice = 'paper';
-      break;
-
-    case 'scissors':
-      userChoice = 'scissors';
-      break;
-
-    default:
-      console.log('error...not a valid option');
+  if (user_choice === 'rock' && computer_choice === 'paper' || user_choice === 'paper' && computer_choice === 'scissors' || user_choice === 'scissors' && computer_choice === 'rock') {
+    computer_wins = true;
   }
 
-  pickWinner(userChoice);
-}; // GAME LOGIC
+  return computer_wins;
+}
 
+function check_if_tie(user_choice, computer_choice) {
+  var tie = false;
+  if (user_choice === computer_choice) tie = true;
+  return tie;
+}
 
-var pickWinner = function pickWinner(userChoice) {
-  var computerChoice = _homeOnTheRange.default.randomChoice(['rock', 'paper', 'scissors']);
+function update_score_and_display(user_choice, computer_choice, tie, computer_wins) {
+  if (tie) {
+    _display.default.set_board_display_to_tie(user_choice, computer_choice);
+  } else if (computer_wins) {
+    _display.default.update_computer_score();
 
-  if (userChoice === computerChoice) {
-    _score.displayScore.displayContent.textContent = "(You: ".concat(userChoice, ") VS (Computer: ").concat(computerChoice, ") >>> It's a tie!!");
-  } else if (userChoice === 'rock' && computerChoice === 'paper' || userChoice === 'paper' && computerChoice === 'scissors' || userChoice === 'scissors' && computerChoice === 'rock') {
-    _score.score.computer++;
-    _score.displayScore.computer.textContent = _score.score.computer;
-    _score.displayScore.displayContent.textContent = "(You: ".concat(userChoice, ") VS (Computer: ").concat(computerChoice, ") >>> You lose, try again!");
+    _display.default.set_board_display_to_loss(user_choice, computer_choice);
   } else {
-    _score.score.user++;
-    _score.displayScore.user.textContent = _score.score.user;
-    _score.displayScore.displayContent.textContent = "(You: ".concat(userChoice, ") VS (Computer: ").concat(computerChoice, ") >>> You won! Best of 3??");
+    _display.default.update_user_score();
+
+    _display.default.set_board_display_to_win(user_choice, computer_choice);
   }
-};
-},{"home-on-the-range":"node_modules/home-on-the-range/index.js","./score":"src/score.js"}],"main.js":[function(require,module,exports) {
+}
+},{"home-on-the-range":"node_modules/home-on-the-range/index.js","./display":"src/display.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 var _app = require("./src/app");
 
+var _display = require("./src/display");
+
 var main = function main() {
-  (0, _app.addListenerAndStartGame)();
-  (0, _app.assignDisplayScoreVariables)();
+  add_listener_and_start_game();
+
+  _display.display.assign_display_score_variables();
 };
 
-main();
-},{"./src/app":"src/app.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+main(); // ------------------------------------------------------------------------
+
+function add_listener_and_start_game() {
+  document.querySelector('.buttons-container').addEventListener('click', function (event) {
+    return (0, _app.run_game_logic)(event);
+  });
+}
+},{"./src/app":"src/app.js","./src/display":"src/display.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -509,7 +574,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61382" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55129" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
