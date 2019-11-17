@@ -425,8 +425,8 @@ function () {
   }
 
   _createClass(Display, [{
-    key: "assign_display_score_variables",
-    value: function assign_display_score_variables() {
+    key: "assign_initial_display_score_variables",
+    value: function assign_initial_display_score_variables() {
       _model.display_content.user.textContent = _model.score.user;
       _model.display_content.computer.textContent = _model.score.computer;
     }
@@ -531,12 +531,14 @@ function update_score_and_display(user_choice, computer_choice, tie, computer_wi
 
 var _app = require("./src/app");
 
-var _display = require("./src/display");
+var _display = _interopRequireDefault(require("./src/display"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var main = function main() {
   add_listener_and_start_game();
 
-  _display.display.assign_display_score_variables();
+  _display.default.assign_initial_display_score_variables();
 };
 
 main(); // ------------------------------------------------------------------------
@@ -574,7 +576,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55129" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55728" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -1,7 +1,7 @@
 import { score, display_content } from './model'
 
 class Display {
-    assign_display_score_variables() {
+    assign_initial_display_score_variables() {
         display_content.user.textContent = score.user
         display_content.computer.textContent = score.computer
     }

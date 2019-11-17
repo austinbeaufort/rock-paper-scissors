@@ -25,7 +25,7 @@ function assign_user_choice(button_clicked) {
 
 function check_if_computer_wins(user_choice, computer_choice) {
     let computer_wins = false
-    if(
+    if (
     user_choice === 'rock' && computer_choice === 'paper'
     || user_choice === 'paper' && computer_choice === 'scissors'
     || user_choice === 'scissors' && computer_choice === 'rock'
